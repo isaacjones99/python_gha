@@ -7,7 +7,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run Python script
         id: compute
-        run: python script.py
+        run: python scripts/script.py
       - name: Use the output
         run: |
           echo "The result was: ${{ steps.compute.outputs.result }}"
