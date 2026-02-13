@@ -1,3 +1,5 @@
+name: Dynamic Matrix Example
+
 on: push
 
 jobs:
@@ -9,15 +11,13 @@ jobs:
       - name: Compute matrix
         id: compute
         run: python scripts/script.py
-      
+
   test:
     needs: build
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         service: ${{ fromJson(needs.build.outputs.matrix) }}
-      
     steps:
       - uses: actions/checkout@v4
       - name: Run tests for service
