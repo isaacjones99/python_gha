@@ -1,11 +1,8 @@
 import json
 import os
 
-data = {
-    "services": ["api", "worker", "scheduler"],
-    "version": "1.2.3"
-}
+services = ["api", "worker", "scheduler"]
 
-# Write to GITHUB_OUTPUT
+# GitHub Actions step output
 with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-    f.write(f"matrix={json.dumps(data['services'])}\n")
+    f.write(f"matrix={json.dumps(services)}\n")
