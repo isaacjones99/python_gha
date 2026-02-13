@@ -5,10 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Run Python script
         id: compute
         run: python script.py
-
       - name: Use the output
-        run: echo "The result was: ${{ steps.compute.outputs.result }}"
+        run: |
+          echo "The result was: ${{ steps.compute.outputs.result }}"
