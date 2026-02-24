@@ -13,14 +13,28 @@ jobs:
         id: compute
         run: python scripts/script.py
 
-  test:
-    needs: build
+  # test:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       service: ${{ fromJson(needs.build.outputs.matrix) }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Test service
+  #       run: |
+  #        echo "Testing service: ${{ matrix.service }}"
+
+  # test:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       environment: [staging, production]
+
+  sample:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: ${{ fromJson(needs.build.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Test service
-        run: |
-         echo "Testing service: ${{ matrix.service }}"
+        os: [macos-latest, windows-latest]
+        environment: [staging, production]
