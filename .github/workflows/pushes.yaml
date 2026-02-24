@@ -41,7 +41,6 @@ jobs:
   production_deploy:
     needs: [production_build]
     runs-on: ubuntu-latest
-    environment: production
     strategy:
       matrix:
         service: ${{ fromJson(needs.production_build.outputs.matrix) }}
