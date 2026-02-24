@@ -49,3 +49,26 @@ jobs:
       - name: Matrix out
         run: |
           echo "Testing service: ${{ matrix.service }}"
+
+  connector_build:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.compute.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compute matrix
+        id: compute
+        run: python scripts/script.py
+
+  connector_deploy:
+    needs: [connector_build]
+    runs-on: ubuntu-latest
+    environment: staging
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.connector_build.outputs.matrix) }}
+    
+    steps:
+      - name: Matrix out
+        run: |
+         echo "Testing service: ${{ matrix.service }}"
