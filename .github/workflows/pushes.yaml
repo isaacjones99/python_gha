@@ -50,7 +50,7 @@ jobs:
         run: |
           echo "Testing service: ${{ matrix.service }}"
 
-  connector_build:
+  connector_build_staging:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.compute.outputs.matrix }}
@@ -60,13 +60,36 @@ jobs:
         id: compute
         run: python scripts/script.py
 
-  connector_deploy:
-    needs: [connector_build]
+  connector_deploy_staging:
+    needs: [connector_build_staging]
     runs-on: ubuntu-latest
     environment: staging
     strategy:
       matrix:
-        service: ${{ fromJson(needs.connector_build.outputs.matrix) }}
+        service: ${{ fromJson(needs.connector_build_staging.outputs.matrix) }}
+    
+    steps:
+      - name: Matrix out
+        run: |
+         echo "Testing service: ${{ matrix.service }}"
+
+  connector_build_production:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.compute.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compute matrix
+        id: compute
+        run: python scripts/script.py
+
+  connector_deploy_production:
+    needs: [connector_build_production]
+    runs-on: ubuntu-latest
+    environment: production
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.connector_build_production.outputs.matrix) }}
     
     steps:
       - name: Matrix out
