@@ -19,7 +19,7 @@ jobs:
     environment: staging
     strategy:
       matrix:
-        service: ${{ fromJson(needs.build.outputs.matrix) }}
+        service: ${{ fromJson(needs.staging_build.outputs.matrix) }}
     
     steps:
       - name: Matrix out
@@ -28,6 +28,7 @@ jobs:
 
   production_build:
     runs-on: ubuntu-latest
+    environment: production
     outputs:
       matrix: ${{ steps.compute.outputs.matrix }}
     steps:
