@@ -2,59 +2,44 @@ name: Dynamic Matrix Example
 
 on: push
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     outputs:
-#       matrix: ${{ steps.compute.outputs.matrix }}
-#     steps:
-#       - uses: actions/checkout@v4
-#       - name: Compute matrix
-#         id: compute
-#         run: python scripts/script.py
-
-#   staging:
-#     needs: [build]
-#     runs-on: ubuntu-latest
-#     environment: staging
-#     strategy:
-#       matrix:
-#         service: ${{ fromJson(needs.build.outputs.matrix) }}
-    
-#     steps:
-#       - name: Matrix out
-#         run: |
-#          echo "Testing service: ${{ matrix.service }}"
-
-#   production:
-#     needs: [build, staging]
-#     runs-on: ubuntu-latest
-#     environment: production
-#     strategy:
-#       matrix:
-#         service: ${{ fromJson(needs.build.outputs.matrix) }}
-    
-#     steps:
-#       - name: Matrix out
-#         run: |
-#          echo "Testing service: ${{ matrix.service }}"
-
 jobs:
-  setup:
+  staging_build:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      matrix: ${{ steps.compute.outputs.matrix }}
     steps:
-      - id: set-matrix
-        run: |
-          # You can use a script to generate a complex JSON string
-          JSON='{"include":[{"project":"app1","node":14},{"project":"app1","node":16},{"project":"app2","node":16}]}'
-          echo "matrix=$JSON" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v4
+      - name: Compute matrix
+        id: compute
+        run: python scripts/script.py
 
-  test:
-    needs: setup
-    strategy:
-      matrix: ${{ fromJson(needs.setup.outputs.matrix) }}
+  staging_deploy:
+    needs: [staging_build]
     runs-on: ubuntu-latest
+    environment: staging
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.build.outputs.matrix) }}
+    
     steps:
-      - run: npm test --project ${{ matrix.project }}
+      - name: Matrix out
+        run: |
+         echo "Testing service: ${{ matrix.service }}"
+
+  production_build:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.compute.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compute matrix
+        id: compute
+        run: python scripts/script.py
+    
+  production_deploy:
+    runs-on: ubuntu-latest
+    needs: [production_build]
+    steps:
+      - name: Matrix out
+        run: |
+          echo "Testing service: ${{ matrix.service }}"
