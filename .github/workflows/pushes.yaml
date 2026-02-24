@@ -74,6 +74,7 @@ jobs:
          echo "Testing service: ${{ matrix.service }}"
 
   connector_build_production:
+    needs: [connector_deploy_staging]
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.compute.outputs.matrix }}
