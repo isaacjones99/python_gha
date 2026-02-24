@@ -29,7 +29,6 @@ jobs:
   production_build:
     runs-on: ubuntu-latest
     needs: [staging_deploy]
-    environment: production
     outputs:
       matrix: ${{ steps.compute.outputs.matrix }}
     steps:
@@ -41,6 +40,7 @@ jobs:
   production_deploy:
     needs: [production_build]
     runs-on: ubuntu-latest
+    environment: production
     strategy:
       matrix:
         service: ${{ fromJson(needs.production_build.outputs.matrix) }}
