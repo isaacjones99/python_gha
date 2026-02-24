@@ -32,15 +32,41 @@ jobs:
   #     matrix:
   #       environment: [staging, production]
 
-  sample:
+  # sample:
+  #   needs: [build]
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       os: [macos-latest, windows-latest]
+  #       environment: [staging, production]
+  #   environment: ${{ matrix.environment }}
+      
+  #   steps:
+  #     - run: |
+  #         echo "${{ matrix.os }} ${{ matrix.environment }}"
+
+  staging:
     needs: [build]
     runs-on: ubuntu-latest
+    environment: staging
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
-        environment: [staging, production]
-    environment: ${{ matrix.environment }}
-      
+        service: ${{ fromJson(needs.build.outputs.matrix) }}
+    
     steps:
-      - run: |
-          echo "${{ matrix.os }} ${{ matrix.environment }}"
+      - name: Matrix out
+        run: |
+         echo "Testing service: ${{ matrix.service }}"
+
+  production:
+    needs: [build, staging]
+    runs-on: ubuntu-latest
+    environment: production
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.build.outputs.matrix) }}
+    
+    steps:
+      - name: Matrix out
+        run: |
+         echo "Testing service: ${{ matrix.service }}"
