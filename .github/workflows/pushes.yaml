@@ -39,6 +39,7 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
         environment: [staging, production]
+    environment: ${{ matrix.environment }}
       
     steps:
       - run: |
