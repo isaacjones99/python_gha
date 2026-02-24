@@ -33,8 +33,13 @@ jobs:
   #       environment: [staging, production]
 
   sample:
+    needs: [build]
     runs-on: ubuntu-latest
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
         environment: [staging, production]
+      
+    steps:
+      - run: |
+          echo "${{ matrix.os }} ${{ matrix.environment }}"
