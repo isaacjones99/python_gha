@@ -28,6 +28,7 @@ jobs:
 
   production_build:
     runs-on: ubuntu-latest
+    needs: [staging_deploy]
     environment: production
     outputs:
       matrix: ${{ steps.compute.outputs.matrix }}
