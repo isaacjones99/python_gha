@@ -2,71 +2,59 @@ name: Dynamic Matrix Example
 
 on: push
 
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     outputs:
+#       matrix: ${{ steps.compute.outputs.matrix }}
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: Compute matrix
+#         id: compute
+#         run: python scripts/script.py
+
+#   staging:
+#     needs: [build]
+#     runs-on: ubuntu-latest
+#     environment: staging
+#     strategy:
+#       matrix:
+#         service: ${{ fromJson(needs.build.outputs.matrix) }}
+    
+#     steps:
+#       - name: Matrix out
+#         run: |
+#          echo "Testing service: ${{ matrix.service }}"
+
+#   production:
+#     needs: [build, staging]
+#     runs-on: ubuntu-latest
+#     environment: production
+#     strategy:
+#       matrix:
+#         service: ${{ fromJson(needs.build.outputs.matrix) }}
+    
+#     steps:
+#       - name: Matrix out
+#         run: |
+#          echo "Testing service: ${{ matrix.service }}"
+
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.compute.outputs.matrix }}
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Compute matrix
-        id: compute
-        run: python scripts/script.py
-
-  # test:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       service: ${{ fromJson(needs.build.outputs.matrix) }}
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - name: Test service
-  #       run: |
-  #        echo "Testing service: ${{ matrix.service }}"
-
-  # test:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       environment: [staging, production]
-
-  # sample:
-  #   needs: [build]
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       os: [macos-latest, windows-latest]
-  #       environment: [staging, production]
-  #   environment: ${{ matrix.environment }}
-      
-  #   steps:
-  #     - run: |
-  #         echo "${{ matrix.os }} ${{ matrix.environment }}"
-
-  staging:
-    needs: [build]
-    runs-on: ubuntu-latest
-    environment: staging
-    strategy:
-      matrix:
-        service: ${{ fromJson(needs.build.outputs.matrix) }}
-    
-    steps:
-      - name: Matrix out
+      - id: set-matrix
         run: |
-         echo "Testing service: ${{ matrix.service }}"
+          # You can use a script to generate a complex JSON string
+          JSON='{"include":[{"project":"app1","node":14},{"project":"app1","node":16},{"project":"app2","node":16}]}'
+          echo "matrix=$JSON" >> $GITHUB_OUTPUT
 
-  production:
-    needs: [build, staging]
-    runs-on: ubuntu-latest
-    environment: production
+  test:
+    needs: setup
     strategy:
-      matrix:
-        service: ${{ fromJson(needs.build.outputs.matrix) }}
-    
+      matrix: ${{ fromJson(needs.setup.outputs.matrix) }}
+    runs-on: ubuntu-latest
     steps:
-      - name: Matrix out
-        run: |
-         echo "Testing service: ${{ matrix.service }}"
+      - run: npm test --project ${{ matrix.project }}
