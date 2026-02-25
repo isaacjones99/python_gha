@@ -17,7 +17,7 @@ def normalize_topics(topics: List[Dict[str, Any]]):
                 "topic": topic["topic_name"],
                 "config": topic,
             })
-    return [matrix]
+    return matrix
 
 def run(environment: Environment):
     topics = [
