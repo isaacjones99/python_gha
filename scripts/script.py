@@ -3,10 +3,17 @@ import json
 import os
 
 from enum import Enum
+from typing import Dict, Any, List
 
 class Environment(Enum):
     STAGING = "staging"
     PRODUCTION = "production"
+
+def normalize_topics(topics: List[Dict[str, Any]]):
+    matrix = {}
+    for topic in topics:
+        matrix[topic["topic_name"]] = topic
+    return matrix
 
 def run(environment: Environment):
     topics = [
@@ -37,7 +44,7 @@ def run(environment: Environment):
 
     # GitHub Actions step output
     with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-        f.write(f"matrix={json.dumps(topics)}")
+        f.write(f"matrix={normalize_topics(topics)}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
