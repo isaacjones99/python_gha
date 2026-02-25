@@ -16,6 +16,7 @@ jobs:
           environment: staging
 
   test_deploy:
+    name: Topics
     needs: [test_composite]
     runs-on: ubuntu-latest
     environment: staging # NEED TO WORK OUT HOW TO DO THIS FOR BOTH ENVS
