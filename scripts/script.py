@@ -10,10 +10,10 @@ class Environment(Enum):
     PRODUCTION = "production"
 
 def normalize_topics(topics: List[Dict[str, Any]]):
-    matrix = {}
+    matrix = []
     for topic in topics:
         matrix[topic["topic_name"]] = topic
-    return matrix
+    return [matrix]
 
 def run(environment: Environment):
     topics = [
