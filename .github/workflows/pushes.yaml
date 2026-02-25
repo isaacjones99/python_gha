@@ -30,6 +30,7 @@ jobs:
           echo "${{ matrix.service }}"
 
   production_topics:
+    needs: [staging_deploy]
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.run_composite.outputs.matrix }}
