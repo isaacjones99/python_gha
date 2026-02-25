@@ -4,6 +4,7 @@ on: push
 
 jobs:
   staging_topics:
+    name: Find new staging topics
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.run_composite.outputs.matrix }}
@@ -16,7 +17,7 @@ jobs:
           environment: staging
 
   staging_deploy:
-    name: Topics ${{ matrix.topic.topic_name }}
+    name: Topic ${{ matrix.topic.topic_name }}
     needs: [staging_topics]
     runs-on: ubuntu-latest
     environment: staging # NEED TO WORK OUT HOW TO DO THIS FOR BOTH ENVS
