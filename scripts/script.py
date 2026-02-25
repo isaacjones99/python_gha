@@ -14,8 +14,7 @@ def normalize_topics(topics: List[Dict[str, Any]]):
     for topic in topics:
         # matrix[topic["topic_name"]] = topic
         matrix.append({
-                "topic": topic["topic_name"],
-                "config": topic,
+                topic["topic_name"]: topic,
             })
     return matrix
 
