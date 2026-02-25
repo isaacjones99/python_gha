@@ -1,0 +1,21 @@
+name: Compute Matrix
+description: "Get assets to deploy"
+
+inputs:
+  environment:
+    required: true
+    type: environment
+    description: Environment to use (staging|production)
+    options:
+      - staging
+      - production
+
+runs:
+  using: composite
+
+  steps:
+    - uses: actions/checkout@v5
+
+    - name: Test output
+      run: |
+        echo "${{ inputs.environment }}"
