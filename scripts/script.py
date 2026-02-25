@@ -47,6 +47,7 @@ def run(environment: Environment):
     ]
 
     # GitHub Actions step output
+    print(normalize_topics(topics))
     with open(os.environ["GITHUB_OUTPUT"], "a") as f:
         f.write(f"matrix={json.dumps(normalize_topics(topics))}")
 
