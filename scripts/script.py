@@ -12,7 +12,11 @@ class Environment(Enum):
 def normalize_topics(topics: List[Dict[str, Any]]):
     matrix = []
     for topic in topics:
-        matrix[topic["topic_name"]] = topic
+        # matrix[topic["topic_name"]] = topic
+        matrix.append({
+                "topic": topic["topic_name"],
+                "config": topic,
+            })
     return [matrix]
 
 def run(environment: Environment):
