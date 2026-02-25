@@ -1,9 +1,23 @@
-import json
+import argparse
 import os
 
-services = ["api", "worker", "scheduler"]
+from enum import Enum
 
-# GitHub Actions step output
-with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-    # f.write(f"matrix={json.dumps(services)}\n")
-    f.write(f"matrix={services}")
+class Environment(Enum):
+    STAGING = "staging"
+    PRODUCTION = "production"
+
+def run(environment: Environment):
+    print(f"{environment}")
+    services = ["api", "worker", "scheduler"]
+
+    # GitHub Actions step output
+    with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+        f.write(f"matrix={services}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("environment", default="staging")
+    args = parser.parse_args()
+
+    run(args.environment)

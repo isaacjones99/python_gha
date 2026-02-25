@@ -4,7 +4,7 @@ description: "Get assets to deploy"
 inputs:
   environment:
     required: true
-    description: Environment to use (staging|production)
+    description: "Environment to use (staging|production)"
 
 runs:
   using: composite
@@ -12,7 +12,8 @@ runs:
   steps:
     - uses: actions/checkout@v5
 
-    - name: Test output
+    - name: Compute Matrix
+      id: compute-matrix
       shell: bash
       run: |
-        echo "${{ inputs.environment }}"
+        python scripts/script.py environment=${{ inputs.environment }}
