@@ -9,73 +9,12 @@ class Environment(Enum):
     STAGING = "staging"
     PRODUCTION = "production"
 
-def normalize_topics(topics: List[Dict[str, Any]]):
-    matrix = []
-    for topic in topics:
-        # matrix[topic["topic_name"]] = topic
-        matrix.append({
-                topic["topic_name"]: topic,
-            })
-    return matrix
-
 def run(environment: Environment):
     topics = ["deploy.test.topic", "another.test.topic"]
-    # topics = [
-    #     {
-    #         "topic_name": "deploy.test.topic",
-    #         "partitions_count": "3",
-    #         "replication_factor": "3",
-    #         "configs": [
-    #             {
-    #                 "name": "min.insync.replicas",
-    #                 "value": "2"
-    #             },
-    #             {
-    #                 "name": "message.timestamp.before.max.ms",
-    #                 "value": "9223372036854775807"
-    #             },
-    #             {
-    #                 "name": "message.timestamp.after.max.ms",
-    #                 "value": "9223372036854775807"
-    #             },
-    #             {
-    #                 "name": "cleanup.policy",
-    #                 "value": "compact"
-    #             }
-    #         ]
-    #     },
-    #     {
-    #         "topic_name": "another.test.topic",
-    #         "partitions_count": "3",
-    #         "replication_factor": "3",
-    #         "configs": [
-    #             {
-    #                 "name": "min.insync.replicas",
-    #                 "value": "2"
-    #             },
-    #             {
-    #                 "name": "message.timestamp.before.max.ms",
-    #                 "value": "9223372036854775807"
-    #             },
-    #             {
-    #                 "name": "message.timestamp.after.max.ms",
-    #                 "value": "9223372036854775807"
-    #             },
-    #             {
-    #                 "name": "cleanup.policy",
-    #                 "value": "compact"
-    #             }
-    #         ]
-    #     },
-    # ]
 
     # GitHub Actions step output
-    # print(normalize_topics(topics))
     with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-        # f.write(f"matrix={json.dumps(normalize_topics(topics))}")
-        f.write(f"matrix={json.dumps(topics)}")
-
-    # print(normalize_topics(topics))
+        f.write(f"matrix={topics}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
