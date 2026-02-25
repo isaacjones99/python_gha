@@ -5,6 +5,8 @@ on: push
 jobs:
   test_composite:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.run_composite.outputs.matrix }}
     steps:
       - id: checkout
         uses: actions/checkout@v5
@@ -12,6 +14,20 @@ jobs:
         uses: ./.github/actions/compute-matrix
         with:
           environment: staging
+
+  test_deploy:
+    needs: [test_composite]
+    runs-on: ubuntu-latest
+    environment: staging # NEED TO WORK OUT HOW TO DO THIS FOR BOTH ENVS
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.test_composite.outputs.matrix) }} # RENAME THIS
+
+    steps:
+      - name: Matrix out
+        run: |
+          echo "${{ matrix.service }}"
+
 
   # staging_build:
   #   runs-on: ubuntu-latest

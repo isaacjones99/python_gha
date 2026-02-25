@@ -6,6 +6,11 @@ inputs:
     required: true
     description: "Environment to use (staging|production)"
 
+outputs:
+  matrix:
+    description: "The assets to deploy"
+    value: ${{ steps.compute-matrix.outputs.matrix }}
+
 runs:
   using: composite
 
