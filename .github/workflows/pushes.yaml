@@ -16,13 +16,13 @@ jobs:
           environment: staging
 
   staging_deploy:
-    name: Topics ${{ matrix.topic }}
+    name: Topics ${{ matrix.topic.topic_name }}
     needs: [staging_topics]
     runs-on: ubuntu-latest
     environment: staging # NEED TO WORK OUT HOW TO DO THIS FOR BOTH ENVS
     strategy:
       matrix:
-        topic: ${{ fromJson(needs.staging_topics.outputs.matrix) }} # RENAME THIS
+        topic: ${{ fromJson(needs.staging_topics.outputs.matrix) }}
 
     steps:
       - name: Matrix out
