@@ -43,6 +43,29 @@ def run(environment: Environment):
                 }
             ]
         },
+        {
+            "topic_name": "another.test.topic",
+            "partitions_count": "3",
+            "replication_factor": "3",
+            "configs": [
+                {
+                    "name": "min.insync.replicas",
+                    "value": "2"
+                },
+                {
+                    "name": "message.timestamp.before.max.ms",
+                    "value": "9223372036854775807"
+                },
+                {
+                    "name": "message.timestamp.after.max.ms",
+                    "value": "9223372036854775807"
+                },
+                {
+                    "name": "cleanup.policy",
+                    "value": "compact"
+                }
+            ]
+        },
     ]
 
     # GitHub Actions step output
