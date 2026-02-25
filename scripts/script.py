@@ -10,7 +10,7 @@ class Environment(Enum):
     PRODUCTION = "production"
 
 def run(environment: Environment):
-    topics = ["deploy.test.topic", "another.test.topic"]
+    topics = set(["deploy.test.topic", "another.test.topic"])
 
     # GitHub Actions step output
     with open(os.environ["GITHUB_OUTPUT"], "a") as f:
