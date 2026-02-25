@@ -17,7 +17,7 @@ jobs:
           environment: staging
 
   staging_deploy:
-    name: Deploy ${{ matrix.topic.topic_name }}
+    name: Deploy ${{ matrix.topic }}
     needs: [staging_topics]
     runs-on: ubuntu-latest
     environment: staging # NEED TO WORK OUT HOW TO DO THIS FOR BOTH ENVS
