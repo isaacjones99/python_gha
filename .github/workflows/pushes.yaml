@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Matrix out
         run: |
-          echo "${{ matrix.topic.topic_name }}"
+          echo "${{ matrix.topic }}"
 
   # production_topics:
   #   needs: [staging_deploy]

@@ -44,7 +44,9 @@ def run(environment: Environment):
 
     # GitHub Actions step output
     with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-        f.write(f"matrix={normalize_topics(topics)}")
+        f.write(f"matrix={json.dumps(normalize_topics(topics))}")
+
+    # print(normalize_topics(topics))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
