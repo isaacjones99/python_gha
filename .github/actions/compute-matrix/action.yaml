@@ -4,11 +4,7 @@ description: "Get assets to deploy"
 inputs:
   environment:
     required: true
-    type: environment
     description: Environment to use (staging|production)
-    options:
-      - staging
-      - production
 
 runs:
   using: composite
@@ -17,5 +13,6 @@ runs:
     - uses: actions/checkout@v5
 
     - name: Test output
+      shell: bash
       run: |
         echo "${{ inputs.environment }}"
