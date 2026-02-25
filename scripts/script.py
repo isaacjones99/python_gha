@@ -1,4 +1,5 @@
 import argparse
+import json
 import os
 
 from enum import Enum
@@ -8,12 +9,35 @@ class Environment(Enum):
     PRODUCTION = "production"
 
 def run(environment: Environment):
-    print(f"{environment}")
-    services = ["api", "worker", "scheduler"]
+    topics = [
+        {
+            "topic_name": "deploy.test.topic",
+            "partitions_count": "3",
+            "replication_factor": "3",
+            "configs": [
+                {
+                    "name": "min.insync.replicas",
+                    "value": "2"
+                },
+                {
+                    "name": "message.timestamp.before.max.ms",
+                    "value": "9223372036854775807"
+                },
+                {
+                    "name": "message.timestamp.after.max.ms",
+                    "value": "9223372036854775807"
+                },
+                {
+                    "name": "cleanup.policy",
+                    "value": "compact"
+                }
+            ]
+        },
+    ]
 
     # GitHub Actions step output
     with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-        f.write(f"matrix={services}")
+        f.write(f"matrix={json.dumps(topics)}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
