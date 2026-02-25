@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Matrix out
         run: |
-          echo "${{ matrix.topic }}"
+          echo "${{ toJson(matrix.topic) }}"
 
   # production_topics:
   #   needs: [staging_deploy]
