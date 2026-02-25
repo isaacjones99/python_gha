@@ -3,7 +3,7 @@ name: Dynamic Matrix Example
 on: push
 
 jobs:
-  test_composite:
+  staging_topics:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.run_composite.outputs.matrix }}
@@ -15,14 +15,40 @@ jobs:
         with:
           environment: staging
 
-  test_deploy:
+  staging_deploy:
     name: Topics
-    needs: [test_composite]
+    needs: [staging_topics]
     runs-on: ubuntu-latest
     environment: staging # NEED TO WORK OUT HOW TO DO THIS FOR BOTH ENVS
     strategy:
       matrix:
-        service: ${{ fromJson(needs.test_composite.outputs.matrix) }} # RENAME THIS
+        service: ${{ fromJson(needs.staging_topics.outputs.matrix) }} # RENAME THIS
+
+    steps:
+      - name: Matrix out
+        run: |
+          echo "${{ matrix.service }}"
+
+  production_topics:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.run_composite.outputs.matrix }}
+    steps:
+      - id: checkout
+        uses: actions/checkout@v5
+      - id: run_composite
+        uses: ./.github/actions/compute-matrix
+        with:
+          environment: production
+
+  production_deploy:
+    name: Topics
+    needs: [production_topics]
+    runs-on: ubuntu-latest
+    environment: production # NEED TO WORK OUT HOW TO DO THIS FOR BOTH ENVS
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.production_topics.outputs.matrix) }} # RENAME THIS
 
     steps:
       - name: Matrix out
