@@ -21,4 +21,8 @@ if __name__ == "__main__":
     parser.add_argument("environment", default="staging")
     args = parser.parse_args()
 
+    print("::error::Topic deployment failed")
+    print("::warning::Topic already exists")
+    print("::notice::Deploying new topic")
+
     run(args.environment)
