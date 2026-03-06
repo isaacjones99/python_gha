@@ -19,20 +19,29 @@ jobs:
           echo "REPORT_FILE=$REPORT_FILE" >> $GITHUB_ENV
           cat >> $REPORT_FILE << 'ENDOFREPORT'
           <h1>Headline</h1>
-          <table>
+          <table style="border-collapse: collapse; border: 1px solid black;">
             <thead>
               <tr>
-                <th colspan="2">Topics</th>
+                <th colspan="3" style="border: 1px solid black;">Topics</th>
+                <th colspan="3" style="border: 1px solid black;">Connectors</th>
               </tr>
               <tr>
-                <th>Staging</th>
-                <th>Production</th>
+                <th style="border: 1px solid black;">Adding</th>
+                <th style="border: 1px solid black;">Deleting</th>
+                <th style="border: 1px solid black;">Drifting</th>
+                <th style="border: 1px solid black;">Adding</th>
+                <th style="border: 1px solid black;">Deleting</th>
+                <th style="border: 1px solid black;">Drifting</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>topic-a</td>
-                <td>topic-b</td>
+                <td style="border: 1px solid black;">Adding 1 topic</td>
+                <td style="border: 1px solid black;">Deleting 1 topic</td>
+                <td style="border: 1px solid black;">Deleting 1 topic</td>
+                <td style="border: 1px solid black;">Adding 1 topic</td>
+                <td style="border: 1px solid black;">Deleting 1 topic</td>
+                <td style="border: 1px solid black;">Deleting 1 topic</td>
               </tr>
             </tbody>
           </table>
