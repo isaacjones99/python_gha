@@ -26,8 +26,8 @@ runs:
       run: |
         python scripts/script.py environment=${{ inputs.environment }}
 
-    # - name: Compute Matrix (production)
-    #   id: compute-matrix-production
-    #   shell: bash
-    #   run: |
-    #     python scripts/script.py environment=${{ inputs.environment }}
+    - name: Compute Matrix (production)
+      id: compute-matrix-production
+      shell: bash
+      run: |
+        python scripts/script.py environment=${{ inputs.environment }}
