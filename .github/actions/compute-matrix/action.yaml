@@ -1,11 +1,6 @@
 name: Compute Matrix
 description: "Get assets to deploy"
 
-inputs:
-  environment:
-    required: true
-    description: "Environment to use (staging|production)"
-
 outputs:
   staging-matrix:
     description: "The assets to deploy"
