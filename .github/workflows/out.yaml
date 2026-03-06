@@ -10,9 +10,9 @@ permissions:
 jobs:
   output_something:
     runs-on: ubuntu-latest
-
     steps:
       - name: Write the summary.md
+        id: write_report
         shell: bash
         run: |
           REPORT_FILE=$(mktemp -t summary.md.XXXXX)
@@ -20,10 +20,13 @@ jobs:
           cat >> $REPORT_FILE << 'ENDOFREPORT'
           ## Headline
           ENDOFREPORT
+          echo "report<<EOF" >> $GITHUB_OUTPUT
+          cat $REPORT_FILE >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v5
         with:
           issue-number: 1
-          body: $REPORT_FILE
+          body: ${{ steps.write_report.outputs.report }}
           reactions: '+2'
