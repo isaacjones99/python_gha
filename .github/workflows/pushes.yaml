@@ -55,7 +55,7 @@ jobs:
       - id: run_composite
         uses: ./.github/actions/compute-matrix
 
-  connectors-staging-deploy:
+  connectors-staging-deploy1:
     name: Deploy ${{ matrix.topic }}
     needs: [find-connectors1]
     runs-on: ubuntu-latest
@@ -69,9 +69,9 @@ jobs:
         run: |
           echo "${{ toJson(matrix.topic) }}"
 
-  connectors-production-deploy:
+  connectors-production-deploy1:
     name: Deploy ${{ matrix.topic }}
-    needs: [find-connectors1, connectors-staging-deploy]
+    needs: [find-connectors1, connectors-staging-deploy1]
     runs-on: ubuntu-latest
     environment: production
     strategy:
