@@ -7,8 +7,8 @@ jobs:
     name: Find topics
     runs-on: ubuntu-latest
     outputs:
-      staging-matrix: ${{ steps.run_composite.outputs.staging_matrix }}
-      production-matrix: ${{ steps.run_composite.outputs.production_matrix }}
+      staging-matrix: ${{ steps.run_composite.outputs.staging-matrix }}
+      production-matrix: ${{ steps.run_composite.outputs.production-matrix }}
     steps:
       - id: checkout
         uses: actions/checkout@v5
@@ -29,19 +29,19 @@ jobs:
         run: |
           echo "${{ toJson(matrix.topic) }}"
 
-  production-deploy:
-    name: Deploy ${{ matrix.topic }}
-    needs: [find-topics]
-    runs-on: ubuntu-latest
-    environment: production
-    strategy:
-      matrix:
-        topic: ${{ fromJson(needs.find-topics.outputs.production-matrix) }}
+  # production-deploy:
+  #   name: Deploy ${{ matrix.topic }}
+  #   needs: [find-topics]
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   strategy:
+  #     matrix:
+  #       topic: ${{ fromJson(needs.find-topics.outputs.production-matrix) }}
 
-    steps:
-      - name: Matrix out
-        run: |
-          echo "${{ toJson(matrix.topic) }}"
+  #   steps:
+  #     - name: Matrix out
+  #       run: |
+  #         echo "${{ toJson(matrix.topic) }}"
 
   # staging_topics:
   #   name: Find new staging topics
