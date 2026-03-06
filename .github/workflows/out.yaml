@@ -20,13 +20,29 @@ jobs:
           cat >> $REPORT_FILE << 'ENDOFREPORT'
           ## Headline
           ENDOFREPORT
-          echo "report<<EOF" >> $GITHUB_OUTPUT
-          cat $REPORT_FILE >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          
+      - name: Write the comment body
+        id: comment-body
+        shell: bash
+        run: |
+          CONTENT=$(cat $REPORT_FILE)
+          echo "REPORT_CONTENT<<ENDOFREPORT" >> $GITHUB_OUTPUT
+          echo "$CONTENT" >> $GITHUB_OUTPUT
+          echo "ENDOFREPORT" >> $GITHUB_OUTPUT
+
+      - name: Find previous report comment
+        id: find-comment
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Headline
 
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v5
         with:
-          issue-number: 1
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
           body: ${{ steps.write_report.outputs.report }}
-          reactions: '+2'
+          edit-mode: replace
+          reactions: '+1'
