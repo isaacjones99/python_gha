@@ -3,29 +3,59 @@ name: Dynamic Matrix Example
 on: push
 
 jobs:
-  staging_topics:
-    name: Find new staging topics
+  find-topics:
+    name: Find topics
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.run_composite.outputs.matrix }}
+      staging-matrix: ${{ steps.run_composite.outputs.staging_matrix }}
+      production-matrix: ${{ steps.run_composite.outputs.production_matrix }}
     steps:
       - id: checkout
         uses: actions/checkout@v5
       - id: run_composite
         uses: ./.github/actions/compute-matrix
-        with:
-          environment: staging
 
-  staging_deploy:
+  staging-deploy:
     name: Deploy ${{ matrix.topic }}
-    needs: [staging_topics]
+    needs: [find-topics]
     runs-on: ubuntu-latest
-    environment: staging # NEED TO WORK OUT HOW TO DO THIS FOR BOTH ENVS
+    environment: staging
     strategy:
       matrix:
-        topic: ${{ fromJson(needs.staging_topics.outputs.matrix) }}
+        topic: ${{ fromJson(needs.find-topics.outputs.staging-matrix) }}
 
-    steps:
-      - name: Matrix out
-        run: |
-          echo "${{ toJson(matrix.topic) }}"
+  production-deploy:
+    name: Deploy ${{ matrix.topic }}
+    needs: [find-topics]
+    runs-on: ubuntu-latest
+    environment: production
+    strategy:
+      matrix:
+        topic: ${{ fromJson(needs.find-topics.outputs.production-matrix) }}
+
+  # staging_topics:
+  #   name: Find new staging topics
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     matrix: ${{ steps.run_composite.outputs.matrix }}
+  #   steps:
+  #     - id: checkout
+  #       uses: actions/checkout@v5
+  #     - id: run_composite
+  #       uses: ./.github/actions/compute-matrix
+  #       with:
+  #         environment: staging
+
+  # staging_deploy:
+  #   name: Deploy ${{ matrix.topic }}
+  #   needs: [staging_topics]
+  #   runs-on: ubuntu-latest
+  #   environment: staging # NEED TO WORK OUT HOW TO DO THIS FOR BOTH ENVS
+  #   strategy:
+  #     matrix:
+  #       topic: ${{ fromJson(needs.staging_topics.outputs.matrix) }}
+
+  #   steps:
+  #     - name: Matrix out
+  #       run: |
+  #         echo "${{ toJson(matrix.topic) }}"
