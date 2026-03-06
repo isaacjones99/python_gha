@@ -1,6 +1,8 @@
 name: Output something
 
-on: push
+on:
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
   output_something:
