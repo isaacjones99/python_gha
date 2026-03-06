@@ -3,8 +3,48 @@ name: Dynamic Matrix Example
 on: push
 
 jobs:
-  find-topics:
-    name: Find topics
+  # find-topics:
+  #   name: Find topics
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     staging-matrix: ${{ steps.run_composite.outputs.staging-matrix }}
+  #     production-matrix: ${{ steps.run_composite.outputs.production-matrix }}
+  #   steps:
+  #     - id: checkout
+  #       uses: actions/checkout@v5
+  #     - id: run_composite
+  #       uses: ./.github/actions/compute-matrix
+
+  # staging-deploy:
+  #   name: Deploy ${{ matrix.topic }}
+  #   needs: [find-topics]
+  #   runs-on: ubuntu-latest
+  #   environment: staging
+  #   strategy:
+  #     matrix:
+  #       topic: ${{ fromJson(needs.find-topics.outputs.staging-matrix) }}
+
+  #   steps:
+  #     - name: Matrix out
+  #       run: |
+  #         echo "${{ toJson(matrix.topic) }}"
+
+  # production-deploy:
+  #   name: Deploy ${{ matrix.topic }}
+  #   needs: [find-topics, staging-deploy]
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   strategy:
+  #     matrix:
+  #       topic: ${{ fromJson(needs.find-topics.outputs.production-matrix) }}
+
+  #   steps:
+  #     - name: Matrix out
+  #       run: |
+  #         echo "${{ toJson(matrix.topic) }}"
+
+  find-connectors1:
+    name: Find connectors
     runs-on: ubuntu-latest
     outputs:
       staging-matrix: ${{ steps.run_composite.outputs.staging-matrix }}
@@ -15,28 +55,28 @@ jobs:
       - id: run_composite
         uses: ./.github/actions/compute-matrix
 
-  staging-deploy:
+  connectors-staging-deploy:
     name: Deploy ${{ matrix.topic }}
-    needs: [find-topics]
+    needs: [find-connectors1]
     runs-on: ubuntu-latest
     environment: staging
     strategy:
       matrix:
-        topic: ${{ fromJson(needs.find-topics.outputs.staging-matrix) }}
+        topic: ${{ fromJson(needs.find-connectors1.outputs.staging-matrix) }}
 
     steps:
       - name: Matrix out
         run: |
           echo "${{ toJson(matrix.topic) }}"
 
-  production-deploy:
+  connectors-production-deploy:
     name: Deploy ${{ matrix.topic }}
-    needs: [find-topics, staging-deploy]
+    needs: [find-connectors1, connectors-staging-deploy]
     runs-on: ubuntu-latest
     environment: production
     strategy:
       matrix:
-        topic: ${{ fromJson(needs.find-topics.outputs.production-matrix) }}
+        topic: ${{ fromJson(needs.find-connectors1.outputs.production-matrix) }}
 
     steps:
       - name: Matrix out
