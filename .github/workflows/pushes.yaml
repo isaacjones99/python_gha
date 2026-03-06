@@ -31,7 +31,7 @@ jobs:
 
   production-deploy:
     name: Deploy ${{ matrix.topic }}
-    needs: [staging-deploy]
+    needs: [find-topics, staging-deploy]
     runs-on: ubuntu-latest
     environment: production
     strategy:
