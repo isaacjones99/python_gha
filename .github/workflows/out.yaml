@@ -19,6 +19,23 @@ jobs:
           echo "REPORT_FILE=$REPORT_FILE" >> $GITHUB_ENV
           cat >> $REPORT_FILE << 'ENDOFREPORT'
           <h1>Headline</h1>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="2">Topics</th>
+              </tr>
+              <tr>
+                <th>Staging</th>
+                <th>Production</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>topic-a</td>
+                <td>topic-b</td>
+              </tr>
+            </tbody>
+          </table>
           ENDOFREPORT
           
       - name: Write the comment body
