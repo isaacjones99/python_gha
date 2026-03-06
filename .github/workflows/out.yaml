@@ -19,29 +19,42 @@ jobs:
           echo "REPORT_FILE=$REPORT_FILE" >> $GITHUB_ENV
           cat >> $REPORT_FILE << 'ENDOFREPORT'
           <h1>Headline</h1>
-          <table style="border-collapse: collapse; border: 1px solid black;">
+          <table style="border-collapse: collapse; border: 1px solid black; margin-bottom: 20px;">
             <thead>
               <tr>
                 <th colspan="3" style="border: 1px solid black;">Topics</th>
-                <th colspan="3" style="border: 1px solid black;">Connectors</th>
               </tr>
               <tr>
-                <th style="border: 1px solid black;">Adding ➕</th>
-                <th style="border: 1px solid black;">Deleting 🗑️</th>
-                <th style="border: 1px solid black;">Drifting </th>
-                <th style="border: 1px solid black;">Adding ➕</th>
-                <th style="border: 1px solid black;">Deleting 🗑️</th>
-                <th style="border: 1px solid black;">Updating</th>
+                <th style="border: 1px solid black;">Adding</th>
+                <th style="border: 1px solid black;">Deleting</th>
+                <th style="border: 1px solid black;">Drifting</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="border: 1px solid black;">1</td>
-                <td style="border: 1px solid black;">1</td>
-                <td style="border: 1px solid black;">1</td>
-                <td style="border: 1px solid black;">1</td>
-                <td style="border: 1px solid black;">1</td>
-                <td style="border: 1px solid black;">1</td>
+                <td style="border: 1px solid black;">Adding 1 topic</td>
+                <td style="border: 1px solid black;">Deleting 1 topic</td>
+                <td style="border: 1px solid black;">Deleting 1 topic</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table style="border-collapse: collapse; border: 1px solid black;">
+            <thead>
+              <tr>
+                <th colspan="3" style="border: 1px solid black;">Connectors</th>
+              </tr>
+              <tr>
+                <th style="border: 1px solid black;">Adding</th>
+                <th style="border: 1px solid black;">Deleting</th>
+                <th style="border: 1px solid black;">Drifting</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border: 1px solid black;">Adding 1 topic</td>
+                <td style="border: 1px solid black;">Deleting 1 topic</td>
+                <td style="border: 1px solid black;">Deleting 1 topic</td>
               </tr>
             </tbody>
           </table>
