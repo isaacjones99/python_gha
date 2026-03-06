@@ -24,10 +24,10 @@ runs:
       id: compute-matrix-staging
       shell: bash
       run: |
-        python scripts/script.py environment=${{ inputs.environment }}
+        python scripts/script.py environment=staging
 
     - name: Compute Matrix (production)
       id: compute-matrix-production
       shell: bash
       run: |
-        python scripts/script.py environment=${{ inputs.environment }}
+        python scripts/script.py environment=production
