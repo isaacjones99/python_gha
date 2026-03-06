@@ -15,10 +15,10 @@ jobs:
         id: write_report
         shell: bash
         run: |
-          REPORT_FILE=$(mktemp -t summary.md.XXXXX)
+          REPORT_FILE=$(mktemp -t summary.html.XXXXX)
           echo "REPORT_FILE=$REPORT_FILE" >> $GITHUB_ENV
           cat >> $REPORT_FILE << 'ENDOFREPORT'
-          ## Headline
+          <h1>Headline</h1>
           ENDOFREPORT
           
       - name: Write the comment body
