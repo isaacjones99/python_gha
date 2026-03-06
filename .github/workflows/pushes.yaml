@@ -29,19 +29,19 @@ jobs:
         run: |
           echo "${{ toJson(matrix.topic) }}"
 
-  # production-deploy:
-  #   name: Deploy ${{ matrix.topic }}
-  #   needs: [find-topics]
-  #   runs-on: ubuntu-latest
-  #   environment: production
-  #   strategy:
-  #     matrix:
-  #       topic: ${{ fromJson(needs.find-topics.outputs.production-matrix) }}
+  production-deploy:
+    name: Deploy ${{ matrix.topic }}
+    needs: [find-topics]
+    runs-on: ubuntu-latest
+    environment: production
+    strategy:
+      matrix:
+        topic: ${{ fromJson(needs.find-topics.outputs.production-matrix) }}
 
-  #   steps:
-  #     - name: Matrix out
-  #       run: |
-  #         echo "${{ toJson(matrix.topic) }}"
+    steps:
+      - name: Matrix out
+        run: |
+          echo "${{ toJson(matrix.topic) }}"
 
   # staging_topics:
   #   name: Find new staging topics

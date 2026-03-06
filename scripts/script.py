@@ -16,7 +16,7 @@ def run(environment: Environment):
     # GitHub Actions step output
     with open(os.environ["GITHUB_OUTPUT"], "a") as f:
         f.write(f"staging_matrix={staging_topics}")
-        # f.write(f"staging_production={production_topics}")
+        f.write(f"staging_production={production_topics}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
