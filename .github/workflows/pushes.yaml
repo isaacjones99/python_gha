@@ -24,6 +24,11 @@ jobs:
       matrix:
         topic: ${{ fromJson(needs.find-topics.outputs.staging-matrix) }}
 
+    steps:
+      - name: Matrix out
+        run: |
+          echo "${{ toJson(matrix.topic) }}"
+
   production-deploy:
     name: Deploy ${{ matrix.topic }}
     needs: [find-topics]
@@ -32,6 +37,11 @@ jobs:
     strategy:
       matrix:
         topic: ${{ fromJson(needs.find-topics.outputs.production-matrix) }}
+
+    steps:
+      - name: Matrix out
+        run: |
+          echo "${{ toJson(matrix.topic) }}"
 
   # staging_topics:
   #   name: Find new staging topics
