@@ -11,7 +11,7 @@ class Environment(Enum):
 
 def run(environment: Environment):
     staging_topics = ["deploy.test.topic", "another.test.topic"]
-    production_topics = ["production.topic"]
+    production_topics = ["production.topic", "another.production.topic"]
 
     # GitHub Actions step output
     with open(os.environ["GITHUB_OUTPUT"], "a") as f:
