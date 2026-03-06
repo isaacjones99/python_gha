@@ -12,6 +12,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Write the summary.md
+        shell: bash
+        run: |
+          REPORT_FILE=$(mktemp -t summary.md.XXXXX)
+          echo "REPORT_FILE=$REPORT_FILE" >> $GITHUB_ENV
+          cat >> $REPORT_FILE << 'ENDOFREPORT'
+          ## Headline
+          ENDOFREPORT
+
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v5
         with:
