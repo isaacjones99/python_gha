@@ -43,6 +43,6 @@ jobs:
         with:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.write_report.outputs.report }}
+          body: ${{ steps.write_report.outputs.REPORT_CONTENT }}
           edit-mode: replace
           reactions: '+1'
