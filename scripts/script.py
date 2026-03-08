@@ -11,15 +11,20 @@ new_topics = ["topic1", "topic2"]
 updated_topics = ["Updated1", "Updated2", "Updated3"]
 deleted_topics = ["Deleted1", "Deleted2", "Deleted3", "Deleted4"]
 
-def create_report():
-    with open("report.md", "w") as f:
-        f.write("### 🚀 Kafka Topics Change Report\n\n")
+def create_report(environment: Environment):
+    with open(f"report_{environment.value}.md", "w") as f:
+        f.write(f"### {environment.value}")
         f.write("| New Topics | Updated Topics | Deleted Topics |\n")
         f.write("| :--- | :--- | :--- |\n")
+
+    # with open("report.md", "w") as f:
+    #     f.write("### 🚀 Kafka Topics Change Report\n\n")
+    #     f.write("| New Topics | Updated Topics | Deleted Topics |\n")
+    #     f.write("| :--- | :--- | :--- |\n")
         
-        # zip_longest pairs items together. fillvalue="" ensures no 'None' appears in the table.
-        for n, u, d in itertools.zip_longest(new_topics, updated_topics, deleted_topics, fillvalue=""):
-            f.write(f"| {n} | {u} | {d} |\n")
+    #     # zip_longest pairs items together. fillvalue="" ensures no 'None' appears in the table.
+    #     for n, u, d in itertools.zip_longest(new_topics, updated_topics, deleted_topics, fillvalue=""):
+    #         f.write(f"| {n} | {u} | {d} |\n")
 
 def run(environment: Environment):
     staging_topics = ["deploy.test.topic", "another.test.topic"]
@@ -32,7 +37,8 @@ def run(environment: Environment):
             f.write(f"production_matrix={production_topics}\n")
 
     # Create report file
-    create_report()
+    create_report(Environment.STAGING)
+    create_report(Environment.PRODUCTION)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

@@ -25,7 +25,7 @@ jobs:
           # Read the file and escape it for GitHub Outputs
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "content<<$EOF" >> $GITHUB_OUTPUT
-          cat report.md >> $GITHUB_OUTPUT
+          cat report_staging.md >> $GITHUB_OUTPUT
           echo "$EOF" >> $GITHUB_OUTPUT
 
       - name: Post Comment to PR
