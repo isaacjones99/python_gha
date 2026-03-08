@@ -13,7 +13,7 @@ deleted_topics = ["Deleted1", "Deleted2", "Deleted3", "Deleted4"]
 
 def create_report(environment: Environment):
     with open(f"report_{environment.value}.md", "w") as f:
-        f.write(f"### {environment.value}")
+        f.write(f"### {environment.value}\n\n")
         f.write("| New Topics | Updated Topics | Deleted Topics |\n")
         f.write("| :--- | :--- | :--- |\n")
 
