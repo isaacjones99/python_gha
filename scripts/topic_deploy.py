@@ -12,6 +12,7 @@ class Deployer:
     def __init__(self, environment: Environment, report: bool = False) -> None:
         self.environment = environment
         self.report = report
+        print(f"{report=}")
 
     def find_new_resources(self) -> Set:
         return {
@@ -27,6 +28,7 @@ class Deployer:
             self.create_report()
 
     def create_report(self):
+        print(f"report_{environment.value}.md")
         with open(f"report_{environment.value}.md", "w") as f:
             f.write(f"### {environment.value.capitalize()}\n\n")
             f.write("| New Topics |\n")
