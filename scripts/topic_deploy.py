@@ -26,7 +26,8 @@ class Deployer:
             f.write("| New Topics |\n")
             f.write("| :--- |\n")
 
-            for n in itertools.zip_longest(self.new_resources, fillvalue=""):
+            # for n in itertools.zip_longest(self.new_resources, fillvalue=""):
+            for n in self.new_resources:
                 f.write(f"| {n} |\n")
 
     def run(self):
