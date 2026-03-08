@@ -13,21 +13,12 @@ deleted_topics = ["Deleted1", "Deleted2", "Deleted3", "Deleted4"]
 
 def create_report(environment: Environment):
     with open(f"report_{environment.value}.md", "w") as f:
-        f.write(f"### {environment.value}\n\n")
+        f.write(f"### {environment.value.capitalize()}\n\n")
         f.write("| New Topics | Updated Topics | Deleted Topics |\n")
         f.write("| :--- | :--- | :--- |\n")
 
         for n, u, d in itertools.zip_longest(new_topics, updated_topics, deleted_topics, fillvalue=""):
             f.write(f"| {n} | {u} | {d} |\n")
-
-    # with open("report.md", "w") as f:
-    #     f.write("### 🚀 Kafka Topics Change Report\n\n")
-    #     f.write("| New Topics | Updated Topics | Deleted Topics |\n")
-    #     f.write("| :--- | :--- | :--- |\n")
-        
-    #     # zip_longest pairs items together. fillvalue="" ensures no 'None' appears in the table.
-    #     for n, u, d in itertools.zip_longest(new_topics, updated_topics, deleted_topics, fillvalue=""):
-    #         f.write(f"| {n} | {u} | {d} |\n")
 
 def run(environment: Environment):
     staging_topics = ["deploy.test.topic", "another.test.topic"]
