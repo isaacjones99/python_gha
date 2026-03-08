@@ -2,7 +2,7 @@ import argparse
 import itertools
 
 from enum import Enum
-from typing import Set
+from typing import List
 
 class Environment(Enum):
     STAGING = "staging"
@@ -13,12 +13,12 @@ class Deployer:
         self.environment = environment
         self.report = report
 
-    def find_new_resources(self) -> Set:
-        return {
+    def find_new_resources(self) -> List[str]:
+        return [
             "topic1",
             "topic2",
             "topic3",
-        }
+        ]
 
     def create_report(self):
         with open(f"report_{environment.value}.md", "w") as f:
