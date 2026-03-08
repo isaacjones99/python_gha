@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run Python Script
-        run: python scripts/script.py
+        run: python scripts/topic_deploy.py environment=staging --report
 
       - name: Read Report
         id: read_report
