@@ -9,19 +9,18 @@ class Environment(Enum):
     PRODUCTION = "production"
 
 
-data = {
-    "Status": "✅ Success",
-    "Coverage": "85%",
-    "Runtime": "12s"
-}
+new_topics = [
+    "topic1",
+    "topic2"
+]
 
 def create_report():
     with open("report.md", "w") as f:
         f.write("### Python script results\n")
-        f.write("| Metric | Values | \n")
-        f.write("| :--- | :--- |\n")
-        for key, value in data.items():
-            f.write(f"| {key} | {value} |\n")
+        f.write("| New | Updated | Deleted | \n")
+        f.write("| :--- | :--- | :--- |\n")
+        for new_topic in new_topics:
+            f.write(f"{new_topic} | | |")
 
 def run(environment: Environment):
     staging_topics = ["deploy.test.topic", "another.test.topic"]
