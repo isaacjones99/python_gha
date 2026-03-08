@@ -20,7 +20,7 @@ def create_report():
         f.write("| New | Updated | Deleted | \n")
         f.write("| :--- | :--- | :--- |\n")
         for new_topic in new_topics:
-            f.write(f"{new_topic} | | |")
+            f.write(f"| {new_topic} | | |\n")
 
 def run(environment: Environment):
     staging_topics = ["deploy.test.topic", "another.test.topic"]
