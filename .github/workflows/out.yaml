@@ -8,80 +8,107 @@ permissions:
   pull-requests: write
 
 jobs:
-  output_something:
+  report:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write # Required to post comments
     steps:
-      - name: Write the summary.md
-        id: write_report
+      - uses: actions/checkout@v4
+
+      - name: Run Python Script
+        run: python script.py
+
+      - name: Read Report
+        id: read_report
         shell: bash
         run: |
-          REPORT_FILE=$(mktemp -t summary.html.XXXXX)
-          echo "REPORT_FILE=$REPORT_FILE" >> $GITHUB_ENV
-          cat >> $REPORT_FILE << 'ENDOFREPORT'
-          <h1>Headline</h1>
-          <table style="border-collapse: collapse; border: 1px solid black; margin-bottom: 20px;">
-            <thead>
-              <tr>
-                <th colspan="3" style="border: 1px solid black;">Topics</th>
-              </tr>
-              <tr>
-                <th style="border: 1px solid black;">Adding</th>
-                <th style="border: 1px solid black;">Deleting</th>
-                <th style="border: 1px solid black;">Drifting</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="border: 1px solid black;">Adding 1 topic</td>
-                <td style="border: 1px solid black;">Deleting 1 topic</td>
-                <td style="border: 1px solid black;">Deleting 1 topic</td>
-              </tr>
-            </tbody>
-          </table>
+          # Read the file and escape it for GitHub Outputs
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "content<<$EOF" >> $GITHUB_OUTPUT
+          cat report.md >> $GITHUB_OUTPUT
+          echo "$EOF" >> $GITHUB_OUTPUT
 
-          <table style="border-collapse: collapse; border: 1px solid black;">
-            <thead>
-              <tr>
-                <th colspan="3" style="border: 1px solid black;">Connectors</th>
-              </tr>
-              <tr>
-                <th style="border: 1px solid black;">Adding</th>
-                <th style="border: 1px solid black;">Deleting</th>
-                <th style="border: 1px solid black;">Drifting</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="border: 1px solid black;">Adding 1 topic</td>
-                <td style="border: 1px solid black;">Deleting 1 topic</td>
-                <td style="border: 1px solid black;">Deleting 1 topic</td>
-              </tr>
-            </tbody>
-          </table>
-          ENDOFREPORT
+      - name: Post Comment to PR
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: ${{ steps.read_report.outputs.content }}
+
+# jobs:
+#   output_something:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Write the summary.md
+#         id: write_report
+#         shell: bash
+#         run: |
+#           REPORT_FILE=$(mktemp -t summary.html.XXXXX)
+#           echo "REPORT_FILE=$REPORT_FILE" >> $GITHUB_ENV
+#           cat >> $REPORT_FILE << 'ENDOFREPORT'
+#           <h1>Headline</h1>
+#           <table style="border-collapse: collapse; border: 1px solid black; margin-bottom: 20px;">
+#             <thead>
+#               <tr>
+#                 <th colspan="3" style="border: 1px solid black;">Topics</th>
+#               </tr>
+#               <tr>
+#                 <th style="border: 1px solid black;">Adding</th>
+#                 <th style="border: 1px solid black;">Deleting</th>
+#                 <th style="border: 1px solid black;">Drifting</th>
+#               </tr>
+#             </thead>
+#             <tbody>
+#               <tr>
+#                 <td style="border: 1px solid black;">Adding 1 topic</td>
+#                 <td style="border: 1px solid black;">Deleting 1 topic</td>
+#                 <td style="border: 1px solid black;">Deleting 1 topic</td>
+#               </tr>
+#             </tbody>
+#           </table>
+
+#           <table style="border-collapse: collapse; border: 1px solid black;">
+#             <thead>
+#               <tr>
+#                 <th colspan="3" style="border: 1px solid black;">Connectors</th>
+#               </tr>
+#               <tr>
+#                 <th style="border: 1px solid black;">Adding</th>
+#                 <th style="border: 1px solid black;">Deleting</th>
+#                 <th style="border: 1px solid black;">Drifting</th>
+#               </tr>
+#             </thead>
+#             <tbody>
+#               <tr>
+#                 <td style="border: 1px solid black;">Adding 1 topic</td>
+#                 <td style="border: 1px solid black;">Deleting 1 topic</td>
+#                 <td style="border: 1px solid black;">Deleting 1 topic</td>
+#               </tr>
+#             </tbody>
+#           </table>
+#           ENDOFREPORT
           
-      - name: Write the comment body
-        id: comment-body
-        shell: bash
-        run: |
-          CONTENT=$(cat $REPORT_FILE)
-          echo "REPORT_CONTENT<<ENDOFREPORT" >> $GITHUB_OUTPUT
-          echo "$CONTENT" >> $GITHUB_OUTPUT
-          echo "ENDOFREPORT" >> $GITHUB_OUTPUT
+#       - name: Write the comment body
+#         id: comment-body
+#         shell: bash
+#         run: |
+#           CONTENT=$(cat $REPORT_FILE)
+#           echo "REPORT_CONTENT<<ENDOFREPORT" >> $GITHUB_OUTPUT
+#           echo "$CONTENT" >> $GITHUB_OUTPUT
+#           echo "ENDOFREPORT" >> $GITHUB_OUTPUT
 
-      - name: Find previous report comment
-        id: find-comment
-        uses: peter-evans/find-comment@v3
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: Headline
+#       - name: Find previous report comment
+#         id: find-comment
+#         uses: peter-evans/find-comment@v3
+#         with:
+#           issue-number: ${{ github.event.pull_request.number }}
+#           comment-author: 'github-actions[bot]'
+#           body-includes: Headline
 
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v5
-        with:
-          comment-id: ${{ steps.find-comment.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.comment-body.outputs.REPORT_CONTENT }}
-          edit-mode: replace
-          reactions: '+1'
+#       - name: Create comment
+#         uses: peter-evans/create-or-update-comment@v5
+#         with:
+#           comment-id: ${{ steps.find-comment.outputs.comment-id }}
+#           issue-number: ${{ github.event.pull_request.number }}
+#           body: ${{ steps.comment-body.outputs.REPORT_CONTENT }}
+#           edit-mode: replace
+#           reactions: '+1'
