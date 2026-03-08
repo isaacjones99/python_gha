@@ -17,6 +17,9 @@ def create_report(environment: Environment):
         f.write("| New Topics | Updated Topics | Deleted Topics |\n")
         f.write("| :--- | :--- | :--- |\n")
 
+        for n, u, d in itertools.zip_longest(new_topics, updated_topics, deleted_topics, fillvalue=""):
+            f.write(f"| {n} | {u} | {d} |\n")
+
     # with open("report.md", "w") as f:
     #     f.write("### 🚀 Kafka Topics Change Report\n\n")
     #     f.write("| New Topics | Updated Topics | Deleted Topics |\n")
