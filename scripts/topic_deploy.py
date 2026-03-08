@@ -12,7 +12,6 @@ class Deployer:
     def __init__(self, environment: Environment, report: bool = False) -> None:
         self.environment = environment
         self.report = report
-        print(f"{report=}")
 
     def find_new_resources(self) -> Set:
         return {
@@ -21,14 +20,7 @@ class Deployer:
             "topic3",
         }
 
-    def run(self):
-        self.new_resources = self.find_new_resources()
-
-        if self.report:
-            self.create_report()
-
     def create_report(self):
-        print(f"report_{environment.value}.md")
         with open(f"report_{environment.value}.md", "w") as f:
             f.write(f"### {environment.value.capitalize()}\n\n")
             f.write("| New Topics |\n")
@@ -36,6 +28,12 @@ class Deployer:
 
             for n in itertools.zip_longest(self.new_resources, fillvalue=""):
                 f.write(f"| {n} |\n")
+
+    def run(self):
+        self.new_resources = self.find_new_resources()
+
+        if self.report:
+            self.create_report()
         
 
 def parse_args() -> argparse.Namespace:
@@ -61,3 +59,7 @@ def parse_args() -> argparse.Namespace:
 if __name__ == "__main__":
     args = parse_args()
     environment = Environment(args.environment)
+    report = args.report
+
+    deployer = Deployer(environment, report)
+    deployer.run()
