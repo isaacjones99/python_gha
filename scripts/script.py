@@ -1,28 +1,42 @@
 import argparse
-import json
 import os
-
+import itertools # Added for handling mismatched list lengths
 from enum import Enum
-from typing import Dict, Any, List
 
 class Environment(Enum):
     STAGING = "staging"
     PRODUCTION = "production"
 
+new_topics = ["topic1", "topic2"]
+updated_topics = ["Updated1", "Updated2", "Updated3"]
+deleted_topics = ["Deleted1", "Deleted2", "Deleted3", "Deleted4"]
+
+def create_report():
+    with open("report.md", "w") as f:
+        f.write("### 🚀 Kafka Topics Change Report\n\n")
+        f.write("| New Topics | Updated Topics | Deleted Topics |\n")
+        f.write("| :--- | :--- | :--- |\n")
+        
+        # zip_longest pairs items together. fillvalue="" ensures no 'None' appears in the table.
+        for n, u, d in itertools.zip_longest(new_topics, updated_topics, deleted_topics, fillvalue=""):
+            f.write(f"| {n} | {u} | {d} |\n")
+
 def run(environment: Environment):
-    topics = ["deploy.test.topic", "another.test.topic"]
+    staging_topics = ["deploy.test.topic", "another.test.topic"]
+    production_topics = ["production.topic", "another.production.topic"]
 
     # GitHub Actions step output
-    with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-        f.write(f"matrix={topics}")
+    if "GITHUB_OUTPUT" in os.environ:
+        with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+            f.write(f"staging_matrix={staging_topics}\n")
+            f.write(f"production_matrix={production_topics}\n")
+
+    # Create report file
+    create_report()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("environment", default="staging")
+    parser.add_argument("--environment", default="staging") # Added -- for proper flag parsing
     args = parser.parse_args()
-
-    print("::error::Topic deployment failed")
-    print("::warning::Topic already exists")
-    print("::notice::Deploying new topic")
 
     run(args.environment)

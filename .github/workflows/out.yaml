@@ -4,19 +4,33 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+permissions:
+  pull-requests: write
+
 jobs:
-  output_something:
+  report:
     runs-on: ubuntu-latest
-
+    permissions:
+      pull-requests: write # Required to post comments
     steps:
-      - name: Create comment
-        uses: peter-evans/create-or-update-comment@v5
-        with:
-          issue-number: 1
-          body: |
-            This is a multi-line test comment
-            - With GitHub **Markdown** :sparkles:
-            - Created by [create-or-update-comment][1]
+      - uses: actions/checkout@v4
 
-            [1]: https://github.com/peter-evans/create-or-update-comment
-          reactions: '+1'
+      - name: Run Python Script
+        run: python scripts/script.py
+
+      - name: Read Report
+        id: read_report
+        shell: bash
+        run: |
+          # Read the file and escape it for GitHub Outputs
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "content<<$EOF" >> $GITHUB_OUTPUT
+          cat report.md >> $GITHUB_OUTPUT
+          echo "$EOF" >> $GITHUB_OUTPUT
+
+      - name: Post Comment to PR
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: ${{ steps.read_report.outputs.content }}
+          

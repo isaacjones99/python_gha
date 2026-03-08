@@ -1,15 +1,13 @@
 name: Compute Matrix
 description: "Get assets to deploy"
 
-inputs:
-  environment:
-    required: true
-    description: "Environment to use (staging|production)"
-
 outputs:
-  matrix:
+  staging-matrix:
     description: "The assets to deploy"
-    value: ${{ steps.compute-matrix.outputs.matrix }}
+    value: ${{ steps.compute-matrix-staging.outputs.staging_matrix }}
+  production-matrix:
+    description: "The assets to deploy"
+    value: ${{ steps.compute-matrix-production.outputs.production_matrix }}
 
 runs:
   using: composite
@@ -17,8 +15,14 @@ runs:
   steps:
     - uses: actions/checkout@v5
 
-    - name: Compute Matrix
-      id: compute-matrix
+    - name: Compute Matrix (staging)
+      id: compute-matrix-staging
       shell: bash
       run: |
-        python scripts/script.py environment=${{ inputs.environment }}
+        python scripts/script.py environment=staging
+
+    - name: Compute Matrix (production)
+      id: compute-matrix-production
+      shell: bash
+      run: |
+        python scripts/script.py environment=production
