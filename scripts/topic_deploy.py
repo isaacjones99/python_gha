@@ -42,8 +42,9 @@ def parse_args() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "environment",
+        "--environment",
         choices=[e.value for e in Environment],
+        required=True,
         help="Target environment (staging|production)",
     )
 
