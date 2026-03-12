@@ -66,7 +66,7 @@ jobs:
     steps:
       - name: Matrix out
         run: |
-          echo "${{ matrix.connector }}"
+          echo "Deploying ${{ matrix.connector }} to ${{ matrix.instance }}"
 
 
   # find-connectors:
