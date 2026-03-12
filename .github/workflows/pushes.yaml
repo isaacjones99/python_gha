@@ -3,45 +3,45 @@ name: Dynamic Matrix Example
 on: push
 
 jobs:
-  find-topics:
-    name: Find topics
-    runs-on: ubuntu-latest
-    outputs:
-      staging-matrix: ${{ steps.run_composite.outputs.staging-matrix }}
-      production-matrix: ${{ steps.run_composite.outputs.production-matrix }}
-    steps:
-      - id: checkout
-        uses: actions/checkout@v5
-      - id: run_composite
-        uses: ./.github/actions/compute-matrix
+  # find-topics:
+  #   name: Find topics
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     staging-matrix: ${{ steps.run_composite.outputs.staging-matrix }}
+  #     production-matrix: ${{ steps.run_composite.outputs.production-matrix }}
+  #   steps:
+  #     - id: checkout
+  #       uses: actions/checkout@v5
+  #     - id: run_composite
+  #       uses: ./.github/actions/compute-matrix
 
-  staging-deploy:
-    name: Deploy ${{ matrix.topic }}
-    needs: [find-topics]
-    runs-on: ubuntu-latest
-    environment: staging
-    strategy:
-      matrix:
-        topic: ${{ fromJson(needs.find-topics.outputs.staging-matrix) }}
+  # staging-deploy:
+  #   name: Deploy ${{ matrix.topic }}
+  #   needs: [find-topics]
+  #   runs-on: ubuntu-latest
+  #   environment: staging
+  #   strategy:
+  #     matrix:
+  #       topic: ${{ fromJson(needs.find-topics.outputs.staging-matrix) }}
 
-    steps:
-      - name: Matrix out
-        run: |
-          echo "${{ toJson(matrix.topic) }}"
+  #   steps:
+  #     - name: Matrix out
+  #       run: |
+  #         echo "${{ toJson(matrix.topic) }}"
 
-  production-deploy:
-    name: Deploy ${{ matrix.topic }}
-    needs: [find-topics]
-    runs-on: ubuntu-latest
-    environment: production
-    strategy:
-      matrix:
-        topic: ${{ fromJson(needs.find-topics.outputs.production-matrix) }}
+  # production-deploy:
+  #   name: Deploy ${{ matrix.topic }}
+  #   needs: [find-topics]
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   strategy:
+  #     matrix:
+  #       topic: ${{ fromJson(needs.find-topics.outputs.production-matrix) }}
 
-    steps:
-      - name: Matrix out
-        run: |
-          echo "${{ toJson(matrix.topic) }}"
+  #   steps:
+  #     - name: Matrix out
+  #       run: |
+  #         echo "${{ toJson(matrix.topic) }}"
 
   find-objects:
     name: Find objects
