@@ -22,7 +22,7 @@ runs:
       id: compute-matrix-staging
       shell: bash
       run: |
-        python scripts/script.py environment=staging
+        python scripts/script.py --environment=staging
 
     # - name: Compute Matrix (production)
     #   id: compute-matrix-production
