@@ -1,0 +1,36 @@
+name: Output something
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write # Required to post comments
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Python Script
+        run: python scripts/topic_deploy.py --environment=staging --report
+
+      - name: Read Report
+        id: read_report
+        shell: bash
+        run: |
+          # Read the file and escape it for GitHub Outputs
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "content<<$EOF" >> $GITHUB_OUTPUT
+          cat report_staging.md >> $GITHUB_OUTPUT
+          echo "$EOF" >> $GITHUB_OUTPUT
+
+      - name: Post Comment to PR
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: ${{ steps.read_report.outputs.content }}
+          
