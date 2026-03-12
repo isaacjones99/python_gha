@@ -43,7 +43,7 @@ def run(environment: Environment):
         with open(os.environ["GITHUB_OUTPUT"], "a") as f:
             # f.write(f"staging_matrix={staging_topics}\n")
             # f.write(f"production_matrix={production_topics}\n")
-            f.write(f"object_marix={json.dumps(matrix)}")
+            f.write(f"object_matrix={json.dumps(matrix)}")
 
     # Create report file
     create_report(Environment.STAGING)
