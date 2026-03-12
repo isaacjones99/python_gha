@@ -10,7 +10,7 @@ outputs:
     value: ${{ steps.compute-matrix-production.outputs.production_matrix }}
   objects-matrix:
     description: "The assets to deploy"
-    value: ${{ steps.compute-matrix-staging.outputs.objects_matrix }}
+    value: ${{ steps.compute-matrix-staging.outputs.object_matrix }}
 
 runs:
   using: composite
