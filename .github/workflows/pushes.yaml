@@ -61,7 +61,7 @@ jobs:
     environment: staging
     strategy:
       matrix:
-        connector: ${{ fromJson(needs.find-objects.outputs.objects-matrix) }}
+        include: ${{ fromJson(needs.find-objects.outputs.objects-matrix) }}
 
     steps:
       - name: Matrix out
