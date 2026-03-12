@@ -55,7 +55,7 @@ jobs:
         uses: ./.github/actions/compute-matrix
 
   objects-deploy:
-    name: Deploy ${{ matrix.connector }}
+    name: "Deploying ${{ matrix.connector }}"
     runs-on: ubuntu-latest
     needs: [find-objects]
     environment: staging
