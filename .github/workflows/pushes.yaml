@@ -43,42 +43,68 @@ jobs:
         run: |
           echo "${{ toJson(matrix.topic) }}"
 
-  find-connectors:
-    name: Find connectors
+  find-objects:
+    name: Find objects
     runs-on: ubuntu-latest
     outputs:
-      staging-matrix: ${{ steps.run_composite.outputs.staging-matrix }}
-      production-matrix: ${{ steps.run_composite.outputs.production-matrix }}
+      objects-matrix: ${{ steps.run_composite.outputs.objects-matrix }}
     steps:
       - id: checkout
         uses: actions/checkout@v5
       - id: run_composite
         uses: ./.github/actions/compute-matrix
 
-  connectors-staging-deploy:
-    name: Deploy ${{ matrix.topic }}
-    needs: [find-connectors]
+  objects-deploy:
+    name: Deploy ${{ matrix.connector }}
     runs-on: ubuntu-latest
+    needs: [find-objects]
     environment: staging
     strategy:
       matrix:
-        topic: ${{ fromJson(needs.find-connectors.outputs.staging-matrix) }}
+        connector: ${{ fromJson(needs.find-objects.outputs.objects-matrix) }}
 
     steps:
       - name: Matrix out
         run: |
-          echo "${{ toJson(matrix.topic) }}"
+          echo "${{ matrix.connector }}"
 
-  connectors-production-deploy:
-    name: Deploy ${{ matrix.topic }}
-    needs: [find-connectors]
-    runs-on: ubuntu-latest
-    environment: production
-    strategy:
-      matrix:
-        topic: ${{ fromJson(needs.find-connectors.outputs.production-matrix) }}
 
-    steps:
-      - name: Matrix out
-        run: |
-          echo "${{ toJson(matrix.topic) }}"
+  # find-connectors:
+  #   name: Find connectors
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     staging-matrix: ${{ steps.run_composite.outputs.staging-matrix }}
+  #     production-matrix: ${{ steps.run_composite.outputs.production-matrix }}
+  #   steps:
+  #     - id: checkout
+  #       uses: actions/checkout@v5
+  #     - id: run_composite
+  #       uses: ./.github/actions/compute-matrix
+
+  # connectors-staging-deploy:
+  #   name: Deploy ${{ matrix.topic }}
+  #   needs: [find-connectors]
+  #   runs-on: ubuntu-latest
+  #   environment: staging
+  #   strategy:
+  #     matrix:
+  #       topic: ${{ fromJson(needs.find-connectors.outputs.staging-matrix) }}
+
+  #   steps:
+  #     - name: Matrix out
+  #       run: |
+  #         echo "${{ toJson(matrix.topic) }}"
+
+  # connectors-production-deploy:
+  #   name: Deploy ${{ matrix.topic }}
+  #   needs: [find-connectors]
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   strategy:
+  #     matrix:
+  #       topic: ${{ fromJson(needs.find-connectors.outputs.production-matrix) }}
+
+  #   steps:
+  #     - name: Matrix out
+  #       run: |
+  #         echo "${{ toJson(matrix.topic) }}"

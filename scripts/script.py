@@ -2,6 +2,7 @@ import argparse
 import os
 import itertools # Added for handling mismatched list lengths
 from enum import Enum
+import json
 
 class Environment(Enum):
     STAGING = "staging"
@@ -24,11 +25,25 @@ def run(environment: Environment):
     staging_topics = ["deploy.test.topic", "another.test.topic"]
     production_topics = ["production.topic", "another.production.topic"]
 
+    instance_connector = {
+        "mongodb": [
+            "connector1",
+            "connector2",
+        ],
+    }
+
+    matrix = [
+        {"instance": instance, "connector": connector}
+        for instance, connectors in instance_connector.items()
+        for connector in connectors
+    ]
+
     # GitHub Actions step output
     if "GITHUB_OUTPUT" in os.environ:
         with open(os.environ["GITHUB_OUTPUT"], "a") as f:
-            f.write(f"staging_matrix={staging_topics}\n")
-            f.write(f"production_matrix={production_topics}\n")
+            # f.write(f"staging_matrix={staging_topics}\n")
+            # f.write(f"production_matrix={production_topics}\n")
+            f.write(f"object_marix={json.dumps(matrix)}")
 
     # Create report file
     create_report(Environment.STAGING)

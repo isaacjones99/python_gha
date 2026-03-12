@@ -8,6 +8,9 @@ outputs:
   production-matrix:
     description: "The assets to deploy"
     value: ${{ steps.compute-matrix-production.outputs.production_matrix }}
+  objects-matrix:
+    description: "The assets to deploy"
+    value: ${{ steps.compute-matrix-staging.outputs.objects_matrix }}
 
 runs:
   using: composite
@@ -21,8 +24,8 @@ runs:
       run: |
         python scripts/script.py environment=staging
 
-    - name: Compute Matrix (production)
-      id: compute-matrix-production
-      shell: bash
-      run: |
-        python scripts/script.py environment=production
+    # - name: Compute Matrix (production)
+    #   id: compute-matrix-production
+    #   shell: bash
+    #   run: |
+    #     python scripts/script.py environment=production
